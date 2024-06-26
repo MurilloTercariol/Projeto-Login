@@ -18,9 +18,11 @@ $retorno = mysqli_query($mysqli, $sql);
 
 $pattern = '/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/';
 
-if(mysqli_num_rows($retorno) > 0 || !preg_match($pattern, $cpf)) {
+if(!preg_match($pattern, $cpf)) {
     echo "CPF inválido <br>";
-}elseif (!isset($_POST["$nome"], $_POST["sobrenome"], $_POST["cpf"], $_POST["email"], $_POST["senha"])) {
+} else if (mysqli_num_rows($retorno) > 0)  {
+    echo "CPF já cadastrado";
+}elseif (!isset($_POST["nome"], $_POST["sobrenome"], $_POST["cpf"], $_POST["email"], $_POST["senha"])) {
     echo "Preencha todos os campos.";
 } else {
     $nome = $_POST['nome'];
@@ -31,9 +33,6 @@ if(mysqli_num_rows($retorno) > 0 || !preg_match($pattern, $cpf)) {
 
     $sql = "INSERT INTO cadastro (nome, sobrenome, cpf, email, senha) value('$nome','$sobrenome','$cpf','$email','$senha')";
     $resultado = mysqli_query($mysqli, $sql);
-
-    $sql_2 = "INSERT INTO usuarios (email, senha) value('$email','$senha')";
-    $resultado_2 = mysqli_query($mysqli, $sql_2);
 
     echo "Usuário cadastrado com sucesso";
 }
